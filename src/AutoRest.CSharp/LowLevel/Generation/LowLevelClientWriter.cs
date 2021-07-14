@@ -45,10 +45,6 @@ namespace AutoRest.CSharp.Generation.Writers
 
         private void WriteClientMethodRequest(CodeWriter writer, LowLevelClientMethod clientMethod)
         {
-            foreach (Parameter parameter in clientMethod.Parameters)
-            {
-                writer.WriteXmlDocumentationParameter(parameter.Name, parameter.Description);
-            }
             RequestWriterHelpers.WriteRequestCreation(writer, clientMethod, lowLevel: true, "private");
         }
 

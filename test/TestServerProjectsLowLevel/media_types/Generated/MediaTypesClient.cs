@@ -132,8 +132,6 @@ namespace media_types_LowLevel
             }
         }
 
-        /// <param name="content"> The content to send as the body of the request. </param>
-        /// <param name="contentType"> Upload file type. </param>
         private HttpMessage CreateAnalyzeBodyRequest(RequestContent content, ContentType contentType)
         {
             var message = Pipeline.CreateMessage();
@@ -263,7 +261,6 @@ namespace media_types_LowLevel
             }
         }
 
-        /// <param name="content"> The content to send as the body of the request. </param>
         private HttpMessage CreateAnalyzeBodyRequest(RequestContent content)
         {
             var message = Pipeline.CreateMessage();
@@ -359,7 +356,6 @@ namespace media_types_LowLevel
             }
         }
 
-        /// <param name="content"> The content to send as the body of the request. </param>
         private HttpMessage CreateContentTypeWithEncodingRequest(RequestContent content)
         {
             var message = Pipeline.CreateMessage();

@@ -45,7 +45,7 @@ namespace AutoRest.CSharp.Generation.Writers
 
         private void WriteClientMethodRequest(CodeWriter writer, LowLevelClientMethod clientMethod)
         {
-            RequestWriterHelpers.WriteRequestCreation(writer, clientMethod, lowLevel: true, "private");
+            RequestWriterHelpers.WriteRequestCreation(writer, clientMethod, "private");
         }
 
         private void WriteClientMethod(CodeWriter writer, LowLevelClientMethod clientMethod, bool async)
@@ -93,11 +93,11 @@ namespace AutoRest.CSharp.Generation.Writers
                 {
                     if (async)
                     {
-                        writer.Line($"await {PipelineField:I}.SendAsync(message, options.CancellationToken).ConfigureAwait(false);");
+                        writer.Line($"await {PipelineProperty:I}.SendAsync(message, options.CancellationToken).ConfigureAwait(false);");
                     }
                     else
                     {
-                        writer.Line($"{PipelineField:I}.Send(message, options.CancellationToken);");
+                        writer.Line($"{PipelineProperty:I}.Send(message, options.CancellationToken);");
                     }
 
                     using (writer.Scope($"if (options.StatusOption == ResponseStatusOption.Default)"))
@@ -227,7 +227,8 @@ namespace AutoRest.CSharp.Generation.Writers
 
         private string CreateMethodName(string name, bool async) => $"{name}{(async ? "Async" : string.Empty)}";
 
-        private const string PipelineField = "Pipeline";
+        private const string PipelineProperty = "Pipeline";
+        private const string PipelineField = "_pipeline";
         private const string CredentialVariable = "credential";
         private const string OptionsVariable = "options";
         private const string APIVersionField = "apiVersion";
@@ -241,8 +242,10 @@ namespace AutoRest.CSharp.Generation.Writers
         private void WriteClientFields(CodeWriter writer, LowLevelRestClient client, BuildContext context)
         {
             writer.WriteXmlDocumentationSummary("The HTTP pipeline for sending and receiving REST requests and responses.");
-            writer.Append($"public virtual {typeof(HttpPipeline)} {PipelineField}");
-            writer.AppendRaw("{ get; }\n");
+            writer.Append($"public virtual {typeof(HttpPipeline)} {PipelineProperty}");
+            writer.AppendRaw("{ get => _pipeline; }\n");
+            writer.Append($"private {typeof(HttpPipeline)} {PipelineField};");
+
 
             foreach (var scheme in context.CodeModel.Security.GetSchemesOrAnonymous())
             {

@@ -17,8 +17,8 @@ namespace httpInfrastructure_LowLevel
     public partial class HttpClientFailureClient
     {
         /// <summary> The HTTP pipeline for sending and receiving REST requests and responses. </summary>
-        public virtual HttpPipeline Pipeline { get; }
-        private const string AuthorizationHeader = "Fake-Subscription-Key";
+        public virtual HttpPipeline Pipeline { get => _pipeline; }
+        private HttpPipeline _pipeline; private const string AuthorizationHeader = "Fake-Subscription-Key";
         private readonly AzureKeyCredential _keyCredential;
         private Uri endpoint;
         private readonly string apiVersion;
@@ -45,7 +45,7 @@ namespace httpInfrastructure_LowLevel
             _clientDiagnostics = new ClientDiagnostics(options);
             _keyCredential = credential;
             var authPolicy = new AzureKeyCredentialPolicy(_keyCredential, AuthorizationHeader);
-            Pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new LowLevelCallbackPolicy() }, new HttpPipelinePolicy[] { authPolicy }, new ResponseClassifier());
+            _pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new LowLevelCallbackPolicy() }, new HttpPipelinePolicy[] { authPolicy }, new ResponseClassifier());
             this.endpoint = endpoint;
             apiVersion = options.Version;
         }
@@ -126,7 +126,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateHead400Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Head;
             var uri = new RawRequestUriBuilder();
@@ -213,7 +213,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet400Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -300,7 +300,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateOptions400Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Options;
             var uri = new RawRequestUriBuilder();
@@ -389,7 +389,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePut400Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -480,7 +480,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePatch400Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Patch;
             var uri = new RawRequestUriBuilder();
@@ -571,7 +571,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePost400Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -662,7 +662,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateDelete400Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -751,7 +751,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateHead401Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Head;
             var uri = new RawRequestUriBuilder();
@@ -838,7 +838,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet402Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -925,7 +925,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateOptions403Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Options;
             var uri = new RawRequestUriBuilder();
@@ -1012,7 +1012,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet403Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -1101,7 +1101,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePut404Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1192,7 +1192,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePatch405Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Patch;
             var uri = new RawRequestUriBuilder();
@@ -1283,7 +1283,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePost406Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -1374,7 +1374,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateDelete407Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -1465,7 +1465,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePut409Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1554,7 +1554,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateHead410Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Head;
             var uri = new RawRequestUriBuilder();
@@ -1641,7 +1641,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet411Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -1728,7 +1728,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateOptions412Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Options;
             var uri = new RawRequestUriBuilder();
@@ -1815,7 +1815,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet412Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -1904,7 +1904,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePut413Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1995,7 +1995,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePatch414Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Patch;
             var uri = new RawRequestUriBuilder();
@@ -2086,7 +2086,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreatePost415Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -2175,7 +2175,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateGet416Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Get;
             var uri = new RawRequestUriBuilder();
@@ -2264,7 +2264,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateDelete417Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -2353,7 +2353,7 @@ namespace httpInfrastructure_LowLevel
 
         private HttpMessage CreateHead429Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Head;
             var uri = new RawRequestUriBuilder();

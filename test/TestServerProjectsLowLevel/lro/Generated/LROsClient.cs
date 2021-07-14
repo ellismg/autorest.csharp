@@ -17,8 +17,8 @@ namespace lro_LowLevel
     public partial class LROsClient
     {
         /// <summary> The HTTP pipeline for sending and receiving REST requests and responses. </summary>
-        public virtual HttpPipeline Pipeline { get; }
-        private const string AuthorizationHeader = "Fake-Subscription-Key";
+        public virtual HttpPipeline Pipeline { get => _pipeline; }
+        private HttpPipeline _pipeline; private const string AuthorizationHeader = "Fake-Subscription-Key";
         private readonly AzureKeyCredential _keyCredential;
         private Uri endpoint;
         private readonly string apiVersion;
@@ -45,7 +45,7 @@ namespace lro_LowLevel
             _clientDiagnostics = new ClientDiagnostics(options);
             _keyCredential = credential;
             var authPolicy = new AzureKeyCredentialPolicy(_keyCredential, AuthorizationHeader);
-            Pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new LowLevelCallbackPolicy() }, new HttpPipelinePolicy[] { authPolicy }, new ResponseClassifier());
+            _pipeline = HttpPipelineBuilder.Build(options, new HttpPipelinePolicy[] { new LowLevelCallbackPolicy() }, new HttpPipelinePolicy[] { authPolicy }, new ResponseClassifier());
             this.endpoint = endpoint;
             apiVersion = options.Version;
         }
@@ -240,7 +240,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut200SucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -441,7 +441,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut201SucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -536,7 +536,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePost202ListRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -735,7 +735,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut200SucceededNoStateRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -936,7 +936,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut202Retry200Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1139,7 +1139,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut201CreatingSucceeded200Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1340,7 +1340,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut200UpdatingSucceeded204Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1543,7 +1543,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut201CreatingFailed200Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1744,7 +1744,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePut200Acceptedcanceled200Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -1945,7 +1945,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutNoHeaderInRetryRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -2146,7 +2146,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncRetrySucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -2347,7 +2347,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncNoRetrySucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -2548,7 +2548,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncRetryFailedRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -2749,7 +2749,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncNoRetrycanceledRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -2950,7 +2950,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncNoHeaderInRetryRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -3091,7 +3091,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutNonResourceRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -3232,7 +3232,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncNonResourceRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -3385,7 +3385,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutSubResourceRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -3538,7 +3538,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePutAsyncSubResourceRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Put;
             var uri = new RawRequestUriBuilder();
@@ -3633,7 +3633,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteProvisioning202Accepted200SucceededRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -3726,7 +3726,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteProvisioning202DeletingFailed200Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -3819,7 +3819,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteProvisioning202Deletingcanceled200Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -3910,7 +3910,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDelete204SucceededRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4003,7 +4003,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDelete202Retry200Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4096,7 +4096,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDelete202NoRetry204Request()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4189,7 +4189,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteNoHeaderInRetryRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4282,7 +4282,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteAsyncNoHeaderInRetryRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4373,7 +4373,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteAsyncRetrySucceededRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4464,7 +4464,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteAsyncNoRetrySucceededRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4555,7 +4555,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteAsyncRetryFailedRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4646,7 +4646,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreateDeleteAsyncRetrycanceledRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Delete;
             var uri = new RawRequestUriBuilder();
@@ -4739,7 +4739,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePost200WithPayloadRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -4938,7 +4938,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePost202Retry200Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5139,7 +5139,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePost202NoRetry204Request(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5232,7 +5232,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostDoubleHeadersFinalLocationGetRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5323,7 +5323,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostDoubleHeadersFinalAzureHeaderGetRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5414,7 +5414,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostDoubleHeadersFinalAzureHeaderGetDefaultRequest()
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5615,7 +5615,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostAsyncRetrySucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -5818,7 +5818,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostAsyncNoRetrySucceededRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -6019,7 +6019,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostAsyncRetryFailedRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();
@@ -6220,7 +6220,7 @@ namespace lro_LowLevel
 
         private HttpMessage CreatePostAsyncRetrycanceledRequest(RequestContent content)
         {
-            var message = Pipeline.CreateMessage();
+            var message = _pipeline.CreateMessage();
             var request = message.Request;
             request.Method = RequestMethod.Post;
             var uri = new RawRequestUriBuilder();

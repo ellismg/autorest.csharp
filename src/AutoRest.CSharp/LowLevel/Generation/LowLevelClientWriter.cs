@@ -178,6 +178,8 @@ namespace AutoRest.CSharp.Generation.Writers
             {
                 writer.WriteXmlDocumentationParameter(parameter.Name, parameter.Description);
             }
+            writer.WriteXmlDocumentationParameter("options", "The request options.");
+
 
             var methodName = CreateMethodName(clientMethod.Name, async);
             var asyncText = async ? "async" : string.Empty;
@@ -188,8 +190,7 @@ namespace AutoRest.CSharp.Generation.Writers
             {
                 writer.WriteParameter(parameter);
             }
-            writer.RemoveTrailingComma();
-            writer.Line($")");
+            writer.Line($"{typeof(RequestOptions)} options = null)");
             writer.Line($"#pragma warning restore AZC0002");
         }
 
